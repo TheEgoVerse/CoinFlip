@@ -5,18 +5,19 @@ import FlipOptionForm from '../components/FlipOptionForm'
 import ProjectInfo from '../components/ProjectInfo'
 import useMetaMask from '../js/metamask'
 import web3 from 'web3'
+import RecentTransactions from '../components/RecentTransactions'
+import FaqModal from '../components/FaqModal'
 export default function CoinFlipPage() {
     const [alert, setAlert] = useState([])
-    const { connect, disconnect, isActive, account, shouldDisable } = useMetaMask()
-    
+    const [displayModal, setDisplayModal] = useState(false)
     return (
         <>
+            <FaqModal displayModalState={[displayModal, setDisplayModal]} />
             <Alert alertState={alert} />
             <ProjectInfo />
-            {!account ? (<button className='coin-flip__connect-disconnect-btn' onClick={connect} disabled={shouldDisable}>Connect Wallet</button>) : (<button className='coin-flip__connect-disconnect-btn' onClick={disconnect}>Disconnect</button>)}
             <div className='coin-flip__container'>
-                <CoinFlip />
                 <FlipOptionForm setAlert={setAlert} />
+                <RecentTransactions />
             </div>
         </>
     )

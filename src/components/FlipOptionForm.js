@@ -6,11 +6,12 @@ import useMetaMask from '../js/metamask'
 
 export default function FlipOptionForm({ setAlert }) {
     const [disableBtn, setDisableBtn] = useState(false)
-    const {  account } = useMetaMask()
+    const { account } = useMetaMask()
 
     return (
-        <div className='coin-flip__flip-options-form'>
-            <form id='coin-flip__form' onSubmit={(event) => coinFlip(event, setAlert, setDisableBtn, account)}>
+        <div className='coin-flip__flip-options-form' style={{ paddingTop: '0px', marginLeft: '20px', marginRight: '20px'}}>
+            <div style={{ fontSize: '2rem', color: 'white', backgroundColor: 'black', fontWeight: '700', borderRadius: '0px' }} className='font-signika coin-flip__white-text-box-container' >PREY COIN FLIP</div>
+            <form id='coin-flip__form' onSubmit={(event) => coinFlip(event, setAlert, setDisableBtn, account)} style={{padding: '0px 20px'}}>
                 <div style={{ fontSize: '2rem', color: 'black', fontWeight: '700' }} className='font-signika coin-flip__white-text-box-container' >Multiplier</div>
                 <div style={{ display: 'flex', flexFlow: 'row wrap', margin: 'auto', justifyContent: 'center' }}>
                     {config.rateOptions.map(x => {
@@ -64,9 +65,15 @@ export default function FlipOptionForm({ setAlert }) {
                         )
                     })}
                 </div>
-
-                <input type={"submit"} disabled={disableBtn} style={{ fontSize: '2rem', color: 'black', fontWeight: '700' }} className='font-signika coin-flip__blue-submit-form-btn' value={'Flip Coin'} />
-
+                <div style={{ display: 'flex', justifyContent: 'center', background: 'black', marginTop: '20px' }}>
+                    <div id="coin-flip-cont">
+                        <div id="coin">
+                            <img className="front" src='https://media.discordapp.net/attachments/879937579749883944/1044677232020439040/unknown.png' alt='coin-front' />
+                            <img className="back" src='https://media.discordapp.net/attachments/879937579749883944/1044677885958553680/tail.png' alt='coin-back' />
+                        </div>
+                    </div>
+                    <input type={"submit"} disabled={disableBtn} style={{ fontSize: '5rem', color: 'black', height: '100%', fontWeight: '700' }} className='font-signika coin-flip__blue-submit-form-btn' value={'Flip Coin'} />
+                </div>
             </form>
 
         </div>

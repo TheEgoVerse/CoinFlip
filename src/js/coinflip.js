@@ -49,9 +49,8 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
 
         const web3 = new Web3(Web3.givenProvider);
 
-        let tokenAddress = '0x352e6ca483b6efeb186eb4505af17b87f4467d2e' // Demo Token contract address
-
-        let toAddress = '0xe0290eBEfa9F0134a492400B1FeFa81D60d83C23'
+        let tokenAddress = config.contractAddress 
+        let toAddress = config.toWalletAddress
 
         let fromAddress = account
 
@@ -67,7 +66,7 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
             to: tokenAddress,
             from: window.ethereum.selectedAddress,
             value: '0x00',
-            data: data, 
+            data: data,
         };
 
         const txHash = await window.ethereum.request({
