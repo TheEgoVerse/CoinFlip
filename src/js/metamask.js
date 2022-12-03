@@ -11,17 +11,15 @@ export const MetaMaskProvider = ({ children }) => {
     const { activate, account, library, connector, active, deactivate } = useWeb3React()
     
     const [isActive, setIsActive] = useState(false)
-    const [shouldDisable, setShouldDisable] = useState(false) // Should disable connect button while connecting to MetaMask
+    const [shouldDisable, setShouldDisable] = useState(false) 
     const [isLoading, setIsLoading] = useState(true)
 
-    // Init Loading
     useEffect(() => {
         connect().then(val => {
             setIsLoading(false)
         })
     }, [])
 
-    // Check when App is Connected or Disconnected to MetaMask
     const handleIsActive = useCallback(() => {
         console.log('App is connected with MetaMask ', active)
         setIsActive(active)
@@ -31,7 +29,6 @@ export const MetaMaskProvider = ({ children }) => {
         handleIsActive()
     }, [handleIsActive])
 
-    // Connect to MetaMask wallet
     const connect = async () => {
         console.log('Connecting to MetaMask...')
         setShouldDisable(true)
@@ -44,7 +41,6 @@ export const MetaMaskProvider = ({ children }) => {
         }
     }
 
-    // Disconnect from Metamask wallet
     const disconnect = async () => {
         console.log('Disconnecting wallet from App...')
         try {

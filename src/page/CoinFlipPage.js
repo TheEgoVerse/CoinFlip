@@ -14,7 +14,7 @@ export default function CoinFlipPage() {
         <>
             <FaqModal displayModalState={[displayModal, setDisplayModal]} />
             <Alert alertState={alert} />
-            <ProjectInfo />
+            <ProjectInfo displayFaqState={[displayModal, setDisplayModal]}/>
             <div className='coin-flip__container'>
                 <FlipOptionForm setAlert={setAlert} />
                 <RecentTransactions />

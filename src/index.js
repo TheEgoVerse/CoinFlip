@@ -18,6 +18,5 @@ root.render(
         <CoinFlipPage />
       </MetaMaskProvider>
     </Web3ReactProvider>
-
   </React.StrictMode>
 );

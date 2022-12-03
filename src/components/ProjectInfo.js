@@ -1,15 +1,15 @@
 import React from 'react'
 import useMetaMask from '../js/metamask'
 
-export default function ProjectInfo() {
+export default function ProjectInfo(props) {
     const { connect, disconnect, isActive, account, shouldDisable } = useMetaMask()
-
+    const [displayModal, setDisplayModal] = props.displayFaqState
     return (
         <>
             <div className='coin-flip__project-info-tab'>
                 <div className='coin-flip__project-info'>
                     <img src='https://media.discordapp.net/attachments/970753739931648002/1047909973662892113/a_184b27b2818376dd2563a2724b127b9e.png' className='coin-flip__project-img' alt="Project" style={{ margin: '10px' }} />
-                    <div className='coin-flip__project-text font-signika' style={{ margin: '10px' }}>
+                    <div className='coin-flip__project-text font-signika' style={{ margin: '10px' }} onClick={() => setDisplayModal(true)}>
                         FAQ
                     </div>
                 </div>
