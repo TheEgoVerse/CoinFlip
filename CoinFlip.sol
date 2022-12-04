@@ -1,7 +1,6 @@
 pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/utils/Strings.sol";
 
 contract CoinFlip {
     event WinEvent(
@@ -12,7 +11,7 @@ contract CoinFlip {
         uint256 checkWin
     );
 
-    IERC20 public token = IERC20(0x352E6Ca483B6eFEb186eB4505Af17B87f4467D2e);
+    IERC20 public token = IERC20(0x830ddEe8f48E183e6B490cf22e10f958FC25Ef39);
 
     function Flip(uint256 amount, uint256 rateOfWin) public payable {
         if (amount > 10000000000000000000) {
