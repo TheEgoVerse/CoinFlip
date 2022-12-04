@@ -15,7 +15,7 @@ contract CoinFlip {
     IERC20 public token = IERC20(0x352E6Ca483B6eFEb186eB4505Af17B87f4467D2e);
 
     function Flip(uint256 amount, uint256 rateOfWin) public payable {
-        if (amount > 100000000000000000000) {
+        if (amount > 10000000000000000000) {
             revert();
         } else {
             if (token.allowance(address(msg.sender), address(this)) < amount) {

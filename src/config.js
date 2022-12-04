@@ -2,7 +2,7 @@ const config = {
     apiURL: 'https://sore-gray-salmon-cape.cyclic.app',
     // apiURL: 'http://localhost:8080',
     tokenAddress: '0x352E6Ca483B6eFEb186eB4505Af17B87f4467D2e',
-    contractAddress: '0x447ebae0723e1e218a410bb88d5f61943b57acb6',
+    contractAddress: '0x9275f0403fd48063fce777db2210a0b4b93aef64',
     toWalletAddress: '0xe0290eBEfa9F0134a492400B1FeFa81D60d83C23',
     rateOptions: [
         {
@@ -42,7 +42,7 @@ const config = {
         },
         {
             id: '10PREYFLIP',
-            amount: 15,
+            amount: 10,
         }
     ],
     choices: ['Head', 'Tail']

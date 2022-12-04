@@ -202,7 +202,7 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
                         if (!winLose) {
                             return showAlert(setAlert, 'You lost the bet.')
                         } else {
-                            return showAlert(setAlert, `Congratulation! You won ${b.returnValues.amount} PREY!`, 'success')
+                            return showAlert(setAlert, `Congratulation! You won ${b.returnValues.amount/1000000000000000000} PREY!`, 'success')
                         }
                     }, 3500);
 
