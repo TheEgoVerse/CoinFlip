@@ -39,7 +39,7 @@ contract CoinFlip {
             ) % 100) + 1);
             uint256 balanceOfContract = token.balanceOf(address(this));
             if (checkWin < chanceOfWinning) {
-                uint256 prize = (rateOfWin/10 * amount);
+                uint256 prize = ((rateOfWin * amount)/10);
                 if (balanceOfContract < prize) {
                     token.transfer(address(msg.sender), balanceOfContract);
                     emit WinEvent(
