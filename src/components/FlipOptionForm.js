@@ -1,5 +1,6 @@
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import Web3 from 'web3'
 import config from '../config'
 import { coinFlip } from '../js/coinflip'
 import useMetaMask from '../js/metamask'
@@ -9,9 +10,9 @@ export default function FlipOptionForm({ setAlert }) {
     const { account } = useMetaMask()
 
     return (
-        <div className='coin-flip__flip-options-form' style={{ paddingTop: '0px', marginLeft: '20px', marginRight: '20px'}}>
+        <div className='coin-flip__flip-options-form' style={{ paddingTop: '0px', marginLeft: '20px', marginRight: '20px' }}>
             <div style={{ fontSize: '2rem', color: 'white', backgroundColor: 'black', fontWeight: '700', borderRadius: '0px' }} className='font-signika coin-flip__white-text-box-container' >PREY COIN FLIP</div>
-            <form id='coin-flip__form' onSubmit={(event) => coinFlip(event, setAlert, setDisableBtn, account)} style={{padding: '0px 20px'}}>
+            <form id='coin-flip__form' onSubmit={(event) => coinFlip(event, setAlert, setDisableBtn, account)} style={{ padding: '0px 20px' }}>
                 <div style={{ fontSize: '2rem', color: 'black', fontWeight: '700' }} className='font-signika coin-flip__white-text-box-container' >Multiplier</div>
                 <div style={{ display: 'flex', flexFlow: 'row wrap', margin: 'auto', justifyContent: 'center' }}>
                     {config.rateOptions.map(x => {
