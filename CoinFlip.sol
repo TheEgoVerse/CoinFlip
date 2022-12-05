@@ -63,9 +63,13 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner {
         uint256 checkWin = _randomWords[0].mod(100).add(1);
         uint256 balanceOfContract = token.balanceOf(address(this));
         if (checkWin < s_requests[_requestId].chanceOfWinning) {
-            uint256 prize = ((s_requests[_requestId].rateOfWin * s_requests[_requestId].amountPaid) / 10);
+            uint256 prize = ((s_requests[_requestId].rateOfWin *
+                s_requests[_requestId].amountPaid) / 10);
             if (balanceOfContract < prize) {
-                token.transfer(address(s_requests[_requestId].payer), balanceOfContract);
+                token.transfer(
+                    address(s_requests[_requestId].payer),
+                    balanceOfContract
+                );
                 emit WinEvent(
                     "Congratulation you won",
                     msg.sender,
