@@ -19,7 +19,7 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
 
     IERC20 public token = IERC20(0x352E6Ca483B6eFEb186eB4505Af17B87f4467D2e);
     uint256 private randomNumber;
-    uint256 private randomUsedTimes;
+    uint256 private randomUsedTimes = 11;
 
     struct RequestStatus {
         uint256 paid;
@@ -35,7 +35,6 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
 
     uint256[] public requestIds;
     uint256 public lastRequestId;
-    uint256 public randomValue;
     uint32 callbackGasLimit = 100000;
     uint16 requestConfirmations = 3;
     uint32 numWords = 1;
@@ -86,7 +85,7 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
         uint256 amountPaid,
         address payer,
         uint256 checkWinNumber
-    ) private {
+    ) internal {
         uint256 balanceOfContract = token.balanceOf(address(this));
         if (checkWinNumber < chanceOfWinning) {
             uint256 prize = (rateOfWin * amountPaid) / 10;
@@ -148,12 +147,13 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
             revert();
         }
 
-        if (randomUsedTimes < 10) {
+        if (randomUsedTimes > 9) {
             uint256 requestId = requestRandomness(
                 callbackGasLimit,
                 requestConfirmations,
                 numWords
             );
+            randomUsedTimes = 0;
             requestIds.push(requestId);
             lastRequestId = requestId;
             s_requests[requestId] = RequestStatus({
@@ -166,6 +166,7 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
                 rateOfWin: rateOfWin
             });
         } else {
+            randomUsedTimes.add(1);
             uint256 checkWinNumber = ((uint256(
                 keccak256(
                     (
