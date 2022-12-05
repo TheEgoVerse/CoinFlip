@@ -66,7 +66,7 @@ export default function FlipOptionForm({ setAlert }) {
                         )
                     })}
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'center', background: 'black', marginTop: '20px' }}>
+                <div style={{ display: 'flex', justifyContent: 'center',  marginTop: '20px' }}>
                     <div id="coin-flip-cont">
                         <div id="coin">
                             <img className="front" src='https://media.discordapp.net/attachments/879937579749883944/1044677232020439040/unknown.png' alt='coin-front' />
