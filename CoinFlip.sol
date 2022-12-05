@@ -4,6 +4,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
 import "@chainlink/contracts/src/v0.8/VRFV2WrapperConsumerBase.sol";
 import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner {
     using SafeMath for uint256;
@@ -17,14 +18,6 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner {
     );
 
     IERC20 public token = IERC20(0x352E6Ca483B6eFEb186eB4505Af17B87f4467D2e);
-
-    bool internal locked;
-    modifier reEntrancy() {
-        require(!locked, "No Reentracy");
-        locked = true;
-        _;
-        locked = false;
-    }
 
     struct RequestStatus {
         uint256 paid;
@@ -98,7 +91,7 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner {
         }
     }
 
-    function Flip(uint256 amount, uint256 rateOfWin) public reEntrancy {
+    function Flip(uint256 amount, uint256 rateOfWin) public nonReentrant {
         uint256 amountCheck = amount / 10000000000000000000;
         require(
             amountCheck != 1 &&
@@ -146,7 +139,7 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner {
         });
     }
 
-    function withdraw(uint256 amount) public reEntrancy {
+    function withdraw(uint256 amount) public nonReentrant {
         if (amount < token.balanceOf(address(this))) {
             revert();
         }
