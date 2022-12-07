@@ -161,7 +161,7 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
                 rateOfWin: rateOfWin
             });
         } else {
-            randomUsedTimes.add(1);
+            randomUsedTimes = randomUsedTimes + 1;
             uint256 checkWinNumber = ((uint256(
                 keccak256(
                     (
