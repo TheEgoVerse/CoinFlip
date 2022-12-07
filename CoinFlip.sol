@@ -53,7 +53,7 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
         require(s_requests[_requestId].paid > 0, "request not found");
 
         s_requests[_requestId].fulfilled = true;
-        s_requests[_requestId].randomWords = _randomWords[0].mod(100).add(1);
+        s_requests[_requestId].randomWords = _randomWords[0];
 
         uint256 vrfValue = _randomWords[0];
         randomNumber = vrfValue;
@@ -128,11 +128,6 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
                 amountCheck != 10,
             "Amount entered restricted."
         );
-        require(
-            (token.allowance(address(this), address(msg.sender)) < amount),
-            "Token transfer not allowed."
-        );
-
         token.transferFrom(msg.sender, address(this), amount);
         uint256 chanceOfWinning;
         if (rateOfWin == 15) {

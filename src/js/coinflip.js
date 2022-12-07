@@ -342,9 +342,8 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
         let amountById = config.amountOptions.find(x => x.id === payload.amount)
         let contract = new web3.eth.Contract(contractABI, contractAddress, { from: fromAddress })
         let amount = web3.utils.toHex(web3.utils.toWei(amountById.amount.toString()));
-        console.log(contract.methods.randomUsedTimes)
         let data = contract.methods.Flip(amount, web3.utils.toHex((rateOfWin * 10).toString())).encodeABI()
-
+        console.log(amount, web3.utils.toHex((rateOfWin * 10).toString()))
         const transactionParameters = {
             nonce: '0x00',
             to: contractAddress,
