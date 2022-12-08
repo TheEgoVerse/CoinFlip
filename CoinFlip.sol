@@ -60,13 +60,7 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
         randomUsedTimes = 0;
         uint256 checkWinNumber = ((uint256(
             keccak256(
-                (
-                    abi.encodePacked(
-                        vrfValue,
-                        block.difficulty,
-                        block.timestamp
-                    )
-                )
+                (abi.encodePacked(vrfValue, block.difficulty, block.timestamp))
             )
         ) % 100) + 1);
 
@@ -120,14 +114,15 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
     }
 
     function Flip(uint256 amount, uint256 rateOfWin) public nonReentrant {
-        uint256 amountCheck = amount / 10000000000000000000;
-        require(
+        uint256 amountCheck = amount / 1000000000000000000;
+        if (
             amountCheck != 1 &&
-                amountCheck != 2 &&
-                amountCheck != 5 &&
-                amountCheck != 10,
-            "Amount entered restricted."
-        );
+            amountCheck != 2 &&
+            amountCheck != 5 &&
+            amountCheck != 10
+        ) {
+            revert('Amount entered restricted.');
+        }
         token.transferFrom(msg.sender, address(this), amount);
         uint256 chanceOfWinning;
         if (rateOfWin == 15) {
