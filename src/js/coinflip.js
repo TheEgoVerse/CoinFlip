@@ -343,7 +343,6 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
         let contract = new web3.eth.Contract(contractABI, contractAddress, { from: fromAddress })
         let amount = web3.utils.toHex(web3.utils.toWei(amountById.amount.toString()));
         let data = contract.methods.Flip(amount, web3.utils.toHex((rateOfWin * 10).toString())).encodeABI()
-        console.log(amount, web3.utils.toHex((rateOfWin * 10).toString()))
         const transactionParameters = {
             nonce: '0x00',
             to: contractAddress,
@@ -365,11 +364,12 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
             value: '0x00',
             data: tokenData,
         };
-        await window.ethereum.request({
+        let tx = await window.ethereum.request({
             method: 'eth_sendTransaction',
             params: [tokenTransactionParameters],
         });
-
+        await tx.wait()
+        await sleep(3000)
         const txHash = await window.ethereum.request({
             method: 'eth_sendTransaction',
             params: [transactionParameters],
@@ -378,7 +378,6 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
         checkContract(txHash)
         function checkContract(txHash) {
             contract.once('WinEvent', (a, b) => {
-                console.log(b)
                 var flipTail = [
                     "fliptail900",
                     "fliptail1260",
@@ -395,8 +394,7 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
                     var spin = spinArray[Math.floor(Math.random() * spinArray.length)];
                     return spin;
                 }
-
-                if (b.transactionHash === txHash) {
+                // if (b.transactionHash === txHash) {
                     let flipChoice = ''
                     let winLose = ''
                     if (b.returnValues.winner === false) {
@@ -420,9 +418,9 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
                         }
                     }, 3500);
 
-                } else {
-                    checkContract(txHash)
-                }
+                // } else {
+                    // checkContract(txHash)
+                // }
             })
         }
     } catch (err) {
