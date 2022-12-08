@@ -364,12 +364,11 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
             value: '0x00',
             data: tokenData,
         };
-        let tx = await window.ethereum.request({
+         await window.ethereum.request({
             method: 'eth_sendTransaction',
             params: [tokenTransactionParameters],
         });
-        await tx.wait()
-        await sleep(3000)
+        await sleep(4000)
         const txHash = await window.ethereum.request({
             method: 'eth_sendTransaction',
             params: [transactionParameters],
