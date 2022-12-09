@@ -30,7 +30,10 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
         uint256 chanceOfWinning;
         uint256 rateOfWin;
     }
-
+    struct Transaction {
+        uint56 blockNumber;
+    }
+    uint256[] public transactions;
     mapping(uint256 => RequestStatus) public s_requests;
 
     uint256[] public requestIds;
@@ -58,19 +61,6 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
         uint256 vrfValue = _randomWords[0];
         randomNumber = vrfValue;
         randomUsedTimes = 0;
-        uint256 checkWinNumber = ((uint256(
-            keccak256(
-                (abi.encodePacked(vrfValue, block.difficulty, block.timestamp))
-            )
-        ) % 100) + 1);
-
-        checkWin(
-            s_requests[_requestId].chanceOfWinning,
-            s_requests[_requestId].rateOfWin,
-            s_requests[_requestId].amountPaid,
-            s_requests[_requestId].payer,
-            checkWinNumber
-        );
     }
 
     function checkWin(
@@ -80,6 +70,7 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
         address payer,
         uint256 checkWinNumber
     ) internal {
+        transactions.push(block.number);
         uint256 balanceOfContract = token.balanceOf(address(this));
         if (checkWinNumber < chanceOfWinning) {
             uint256 prize = (rateOfWin * amountPaid) / 10;
@@ -121,7 +112,7 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
             amountCheck != 5 &&
             amountCheck != 10
         ) {
-            revert('Amount entered restricted.');
+            revert("Amount entered restricted.");
         }
         token.transferFrom(msg.sender, address(this), amount);
         uint256 chanceOfWinning;
@@ -155,6 +146,27 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
                 chanceOfWinning: chanceOfWinning,
                 rateOfWin: rateOfWin
             });
+
+            randomUsedTimes = 0;
+            uint256 checkWinNumber = ((uint256(
+                keccak256(
+                    (
+                        abi.encodePacked(
+                            randomNumber,
+                            block.difficulty,
+                            block.timestamp
+                        )
+                    )
+                )
+            ) % 100) + 1);
+
+            checkWin(
+                chanceOfWinning,
+                rateOfWin,
+                amount,
+                address(msg.sender),
+                checkWinNumber
+            );
         } else {
             randomUsedTimes = randomUsedTimes + 1;
             uint256 checkWinNumber = ((uint256(
@@ -190,5 +202,9 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
             revert();
         }
         token.transfer(address(msg.sender), amount);
+    }
+
+    function getTransactions() public view returns (uint256[] memory) {
+        return (transactions);
     }
 }

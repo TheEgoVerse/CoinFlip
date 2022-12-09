@@ -58,62 +58,6 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
         let contractABI = [
             {
                 "inputs": [],
-                "name": "acceptOwnership",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "amount",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "rateOfWin",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "Flip",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "_requestId",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256[]",
-                        "name": "_randomWords",
-                        "type": "uint256[]"
-                    }
-                ],
-                "name": "rawFulfillRandomWords",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "address",
-                        "name": "to",
-                        "type": "address"
-                    }
-                ],
-                "name": "transferOwnership",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [],
                 "stateMutability": "nonpayable",
                 "type": "constructor"
             },
@@ -198,11 +142,36 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
                         "internalType": "uint256",
                         "name": "amount",
                         "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "rateOfWin",
+                        "type": "uint256"
                     }
                 ],
-                "name": "withdraw",
+                "name": "Flip",
                 "outputs": [],
                 "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "acceptOwnership",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "getTransactions",
+                "outputs": [
+                    {
+                        "internalType": "uint256[]",
+                        "name": "",
+                        "type": "uint256[]"
+                    }
+                ],
+                "stateMutability": "view",
                 "type": "function"
             },
             {
@@ -232,29 +201,21 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
                 "type": "function"
             },
             {
-                "inputs": [],
-                "name": "randomNumber",
-                "outputs": [
+                "inputs": [
                     {
                         "internalType": "uint256",
-                        "name": "",
+                        "name": "_requestId",
                         "type": "uint256"
-                    }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "randomUsedTimes",
-                "outputs": [
+                    },
                     {
-                        "internalType": "uint256",
-                        "name": "",
-                        "type": "uint256"
+                        "internalType": "uint256[]",
+                        "name": "_randomWords",
+                        "type": "uint256[]"
                     }
                 ],
-                "stateMutability": "view",
+                "name": "rawFulfillRandomWords",
+                "outputs": [],
+                "stateMutability": "nonpayable",
                 "type": "function"
             },
             {
@@ -337,12 +298,57 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
                 ],
                 "stateMutability": "view",
                 "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "transactions",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "to",
+                        "type": "address"
+                    }
+                ],
+                "name": "transferOwnership",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "amount",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "withdraw",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
             }
         ]
         let amountById = config.amountOptions.find(x => x.id === payload.amount)
         let contract = new web3.eth.Contract(contractABI, contractAddress, { from: fromAddress })
         let amount = web3.utils.toHex(web3.utils.toWei(amountById.amount.toString()));
-        console.log(web3.utils.toWei(amountById.amount.toString()))
+
         let data = contract.methods.Flip(amount, web3.utils.toHex((rateOfWin * 10).toString())).encodeABI()
         const transactionParameters = {
             nonce: '0x00',
@@ -394,6 +400,7 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
                     var spin = spinArray[Math.floor(Math.random() * spinArray.length)];
                     return spin;
                 }
+                console.log(b)
                 // if (b.transactionHash === txHash) {
                     let flipChoice = ''
                     let winLose = ''
