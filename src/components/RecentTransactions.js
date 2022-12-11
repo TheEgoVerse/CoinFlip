@@ -340,7 +340,7 @@ export default function RecentTransactions() {
             return setTransactions([])
         }
     }
-    const explorer = 'https://testnet.snowtrace.io'
+    const explorer = 'https://snowtrace.io'
     return (
         <div className='coin-flip__flip-options-form' style={{ paddingTop: '0px', marginLeft: '20px', marginRight: '20px' }}>
             <div style={{ fontSize: '2rem', color: 'white', backgroundColor: 'black', fontWeight: '700', borderRadius: '0px' }} className='font-signika coin-flip__white-text-box-container' >Recent Transactions</div>
