@@ -33,6 +33,7 @@ export default function FaqModal(props) {
                         FAQ
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        <pre>
                         - What is PREY?
 
                         PREY is our native utility token with an unlimited supply. Printed solely by staking Alter Ego Punks.
@@ -72,6 +73,7 @@ export default function FaqModal(props) {
                         - How do I collect my winnings?
 
                         Your winnings will automatically appear in your wallet if you won the bet.
+                        </pre>
                     </Typography>
                 </Box>
             </Modal>

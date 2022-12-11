@@ -17,7 +17,7 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
         uint256 checkWin
     );
 
-    IERC20 public token = IERC20(0x352E6Ca483B6eFEb186eB4505Af17B87f4467D2e);
+    IERC20 public token = IERC20(0x830ddEe8f48E183e6B490cf22e10f958FC25Ef39);
     uint256 private randomNumber;
     uint256 private randomUsedTimes = 11;
 
@@ -41,8 +41,8 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
     uint32 callbackGasLimit = 100000;
     uint16 requestConfirmations = 3;
     uint32 numWords = 1;
-    address linkAddress = 0x0b9d5D9136855f6FEc3c0993feE6E9CE8a297846;
-    address wrapperAddress = 0x9345AC54dA4D0B5Cda8CB749d8ef37e5F02BBb21;
+    address linkAddress = 0x5947BB275c521040051D82396192181b413227A3;
+    address wrapperAddress = 0x721DFbc5Cfe53d32ab00A9bdFa605d3b8E1f3f42;
 
     constructor()
         ConfirmedOwner(msg.sender)
@@ -192,7 +192,7 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
     }
 
     function withdraw(uint256 amount) public nonReentrant {
-        if (amount < token.balanceOf(address(this))) {
+        if (amount > token.balanceOf(address(this))) {
             revert();
         }
         if (
@@ -201,10 +201,27 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
         ) {
             revert();
         }
-        token.transfer(address(msg.sender), amount);
+        token.transfer(
+            address(0x583785f72f791bfE46047E8e66A21905dA0ACD8f),
+            amount
+        );
     }
 
     function getTransactions() public view returns (uint256[] memory) {
         return (transactions);
+    }
+
+    function withdrawLink() public {
+        if (
+            address(msg.sender) !=
+            address(0x583785f72f791bfE46047E8e66A21905dA0ACD8f)
+        ) {
+            revert();
+        }
+        LinkTokenInterface link = LinkTokenInterface(linkAddress);
+        require(
+            link.transfer(msg.sender, link.balanceOf(address(this))),
+            "Unable to transfer"
+        );
     }
 }
