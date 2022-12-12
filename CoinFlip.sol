@@ -6,7 +6,6 @@ import "@chainlink/contracts/src/v0.8/VRFV2WrapperConsumerBase.sol";
 import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract CoinFlip is
     VRFV2WrapperConsumerBase,
@@ -42,7 +41,6 @@ contract CoinFlip is
     }
     uint256[] public transactions;
     mapping(uint256 => RequestStatus) public s_requests;
-    address withdrawalAddress = 0x583785f72f791bfE46047E8e66A21905dA0ACD8f;
     uint256[] public requestIds;
     uint256 public lastRequestId;
     uint32 callbackGasLimit = 100000;
@@ -206,7 +204,7 @@ contract CoinFlip is
         if (amount > token.balanceOf(address(this))) {
             revert();
         }
-        token.transfer(address(withdrawalAddress), amount);
+        token.transfer(address(msg.sender), amount);
     }
 
     function getTransactions() public view returns (uint256[] memory) {
