@@ -6,6 +6,7 @@ import "@chainlink/contracts/src/v0.8/VRFV2WrapperConsumerBase.sol";
 import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract CoinFlip is
     VRFV2WrapperConsumerBase,
@@ -201,11 +202,8 @@ contract CoinFlip is
         }
     }
 
-    function withdraw(uint256 amount) public nonReentrant {
+    function withdraw(uint256 amount) public nonReentrant onlyOwner {
         if (amount > token.balanceOf(address(this))) {
-            revert();
-        }
-        if (address(msg.sender) != address(withdrawalAddress)) {
             revert();
         }
         token.transfer(address(withdrawalAddress), amount);
@@ -215,10 +213,7 @@ contract CoinFlip is
         return (transactions);
     }
 
-    function withdrawLink() public {
-        if (address(msg.sender) != address(withdrawalAddress)) {
-            revert();
-        }
+    function withdrawLink() public onlyOwner {
         LinkTokenInterface link = LinkTokenInterface(linkAddress);
         require(
             link.transfer(msg.sender, link.balanceOf(address(this))),
