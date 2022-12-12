@@ -156,7 +156,6 @@ contract CoinFlip is
                 rateOfWin: rateOfWin
             });
 
-            randomUsedTimes = 0;
             uint256 checkWinNumber = ((uint256(
                 keccak256(
                     (
