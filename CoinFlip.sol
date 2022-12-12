@@ -211,6 +211,14 @@ contract CoinFlip is
         return (transactions);
     }
 
+    function setWrapperAddress(address addr) public onlyOwner {
+        wrapperAddress = addr;
+    }
+
+    function setLinkAddress(address addr) public onlyOwner {
+        linkAddress = addr;
+    }
+
     function withdrawLink() public onlyOwner {
         LinkTokenInterface link = LinkTokenInterface(linkAddress);
         require(
