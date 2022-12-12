@@ -201,13 +201,6 @@ contract CoinFlip is
         }
     }
 
-    function setWithdrawalAddress(address newWithdrawAddress) public {
-        if (address(msg.sender) != address(withdrawalAddress)) {
-            revert();
-        }
-        withdrawalAddress = newWithdrawAddress;
-    }
-
     function withdraw(uint256 amount) public nonReentrant {
         if (amount > token.balanceOf(address(this))) {
             revert();
