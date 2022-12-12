@@ -5,8 +5,14 @@ import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
 import "@chainlink/contracts/src/v0.8/VRFV2WrapperConsumerBase.sol";
 import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 
-contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
+contract CoinFlip is
+    VRFV2WrapperConsumerBase,
+    ConfirmedOwner,
+    ReentrancyGuard,
+    Pausable
+{
     using SafeMath for uint256;
 
     event WinEvent(
@@ -35,7 +41,7 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
     }
     uint256[] public transactions;
     mapping(uint256 => RequestStatus) public s_requests;
-
+    address withdrawalAddress = 0x583785f72f791bfE46047E8e66A21905dA0ACD8f;
     uint256[] public requestIds;
     uint256 public lastRequestId;
     uint32 callbackGasLimit = 100000;
@@ -104,7 +110,11 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
         }
     }
 
-    function Flip(uint256 amount, uint256 rateOfWin) public nonReentrant {
+    function Flip(uint256 amount, uint256 rateOfWin)
+        public
+        nonReentrant
+        whenNotPaused
+    {
         uint256 amountCheck = amount / 1000000000000000000;
         if (
             amountCheck != 1 &&
@@ -191,20 +201,21 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
         }
     }
 
+    function setWithdrawalAddress(address newWithdrawAddress) public {
+        if (address(msg.sender) != address(withdrawalAddress)) {
+            revert();
+        }
+        withdrawalAddress = newWithdrawAddress;
+    }
+
     function withdraw(uint256 amount) public nonReentrant {
         if (amount > token.balanceOf(address(this))) {
             revert();
         }
-        if (
-            address(msg.sender) !=
-            address(0x583785f72f791bfE46047E8e66A21905dA0ACD8f)
-        ) {
+        if (address(msg.sender) != address(withdrawalAddress)) {
             revert();
         }
-        token.transfer(
-            address(0x583785f72f791bfE46047E8e66A21905dA0ACD8f),
-            amount
-        );
+        token.transfer(address(withdrawalAddress), amount);
     }
 
     function getTransactions() public view returns (uint256[] memory) {
@@ -212,10 +223,7 @@ contract CoinFlip is VRFV2WrapperConsumerBase, ConfirmedOwner, ReentrancyGuard {
     }
 
     function withdrawLink() public {
-        if (
-            address(msg.sender) !=
-            address(0x583785f72f791bfE46047E8e66A21905dA0ACD8f)
-        ) {
+        if (address(msg.sender) != address(withdrawalAddress)) {
             revert();
         }
         LinkTokenInterface link = LinkTokenInterface(linkAddress);
