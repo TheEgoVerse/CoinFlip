@@ -3,7 +3,6 @@ pragma solidity ^0.8.7;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
 import "@chainlink/contracts/src/v0.8/VRFV2WrapperConsumerBase.sol";
-import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 
@@ -13,8 +12,6 @@ contract CoinFlip is
     ReentrancyGuard,
     Pausable
 {
-    using SafeMath for uint256;
-
     event WinEvent(
         string msg,
         address user,
@@ -23,7 +20,7 @@ contract CoinFlip is
         uint256 checkWin
     );
 
-    IERC20 public token = IERC20(0x830ddEe8f48E183e6B490cf22e10f958FC25Ef39);
+    IERC20 public token = IERC20(0x352E6Ca483B6eFEb186eB4505Af17B87f4467D2e);
     uint256 private randomNumber;
     uint256 private randomUsedTimes = 11;
 
@@ -46,8 +43,8 @@ contract CoinFlip is
     uint32 callbackGasLimit = 100000;
     uint16 requestConfirmations = 3;
     uint32 numWords = 1;
-    address linkAddress = 0x5947BB275c521040051D82396192181b413227A3;
-    address wrapperAddress = 0x721DFbc5Cfe53d32ab00A9bdFa605d3b8E1f3f42;
+    address linkAddress = 0x0b9d5D9136855f6FEc3c0993feE6E9CE8a297846;
+    address wrapperAddress = 0x9345AC54dA4D0B5Cda8CB749d8ef37e5F02BBb21;
 
     constructor()
         ConfirmedOwner(msg.sender)

@@ -18,6 +18,31 @@ export default function RecentTransactions() {
             let contractABI = [
                 {
                     "inputs": [],
+                    "name": "acceptOwnership",
+                    "outputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "amount",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "rateOfWin",
+                            "type": "uint256"
+                        }
+                    ],
+                    "name": "Flip",
+                    "outputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [],
                     "stateMutability": "nonpayable",
                     "type": "constructor"
                 },
@@ -64,6 +89,89 @@ export default function RecentTransactions() {
                     "inputs": [
                         {
                             "indexed": false,
+                            "internalType": "address",
+                            "name": "account",
+                            "type": "address"
+                        }
+                    ],
+                    "name": "Paused",
+                    "type": "event"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "_requestId",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "uint256[]",
+                            "name": "_randomWords",
+                            "type": "uint256[]"
+                        }
+                    ],
+                    "name": "rawFulfillRandomWords",
+                    "outputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "address",
+                            "name": "addr",
+                            "type": "address"
+                        }
+                    ],
+                    "name": "setLinkAddress",
+                    "outputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "address",
+                            "name": "addr",
+                            "type": "address"
+                        }
+                    ],
+                    "name": "setWrapperAddress",
+                    "outputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "address",
+                            "name": "to",
+                            "type": "address"
+                        }
+                    ],
+                    "name": "transferOwnership",
+                    "outputs": [],
+                    "stateMutability": "nonpayable",
+                    "type": "function"
+                },
+                {
+                    "anonymous": false,
+                    "inputs": [
+                        {
+                            "indexed": false,
+                            "internalType": "address",
+                            "name": "account",
+                            "type": "address"
+                        }
+                    ],
+                    "name": "Unpaused",
+                    "type": "event"
+                },
+                {
+                    "anonymous": false,
+                    "inputs": [
+                        {
+                            "indexed": false,
                             "internalType": "string",
                             "name": "msg",
                             "type": "string"
@@ -102,21 +210,16 @@ export default function RecentTransactions() {
                             "internalType": "uint256",
                             "name": "amount",
                             "type": "uint256"
-                        },
-                        {
-                            "internalType": "uint256",
-                            "name": "rateOfWin",
-                            "type": "uint256"
                         }
                     ],
-                    "name": "Flip",
+                    "name": "withdraw",
                     "outputs": [],
                     "stateMutability": "nonpayable",
                     "type": "function"
                 },
                 {
                     "inputs": [],
-                    "name": "acceptOwnership",
+                    "name": "withdrawLink",
                     "outputs": [],
                     "stateMutability": "nonpayable",
                     "type": "function"
@@ -161,21 +264,16 @@ export default function RecentTransactions() {
                     "type": "function"
                 },
                 {
-                    "inputs": [
+                    "inputs": [],
+                    "name": "paused",
+                    "outputs": [
                         {
-                            "internalType": "uint256",
-                            "name": "_requestId",
-                            "type": "uint256"
-                        },
-                        {
-                            "internalType": "uint256[]",
-                            "name": "_randomWords",
-                            "type": "uint256[]"
+                            "internalType": "bool",
+                            "name": "",
+                            "type": "bool"
                         }
                     ],
-                    "name": "rawFulfillRandomWords",
-                    "outputs": [],
-                    "stateMutability": "nonpayable",
+                    "stateMutability": "view",
                     "type": "function"
                 },
                 {
@@ -277,32 +375,6 @@ export default function RecentTransactions() {
                     ],
                     "stateMutability": "view",
                     "type": "function"
-                },
-                {
-                    "inputs": [
-                        {
-                            "internalType": "address",
-                            "name": "to",
-                            "type": "address"
-                        }
-                    ],
-                    "name": "transferOwnership",
-                    "outputs": [],
-                    "stateMutability": "nonpayable",
-                    "type": "function"
-                },
-                {
-                    "inputs": [
-                        {
-                            "internalType": "uint256",
-                            "name": "amount",
-                            "type": "uint256"
-                        }
-                    ],
-                    "name": "withdraw",
-                    "outputs": [],
-                    "stateMutability": "nonpayable",
-                    "type": "function"
                 }
             ]
             let contract = new web3.eth.Contract(contractABI, contractAddress)
@@ -317,6 +389,7 @@ export default function RecentTransactions() {
             checkTransaction()
             function checkTransaction() {
                 contract.once('WinEvent', async (err, event) => {
+                    console.log(event)
                     checkTransaction()
                     if (event.blockNumber) {
                         let tx = (await web3.eth.getBlock(event.blockNumber))

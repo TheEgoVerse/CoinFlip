@@ -58,6 +58,31 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
         let contractABI = [
             {
                 "inputs": [],
+                "name": "acceptOwnership",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "amount",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "rateOfWin",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "Flip",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [],
                 "stateMutability": "nonpayable",
                 "type": "constructor"
             },
@@ -104,6 +129,89 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
                 "inputs": [
                     {
                         "indexed": false,
+                        "internalType": "address",
+                        "name": "account",
+                        "type": "address"
+                    }
+                ],
+                "name": "Paused",
+                "type": "event"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "_requestId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256[]",
+                        "name": "_randomWords",
+                        "type": "uint256[]"
+                    }
+                ],
+                "name": "rawFulfillRandomWords",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "addr",
+                        "type": "address"
+                    }
+                ],
+                "name": "setLinkAddress",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "addr",
+                        "type": "address"
+                    }
+                ],
+                "name": "setWrapperAddress",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "to",
+                        "type": "address"
+                    }
+                ],
+                "name": "transferOwnership",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": false,
+                        "internalType": "address",
+                        "name": "account",
+                        "type": "address"
+                    }
+                ],
+                "name": "Unpaused",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": false,
                         "internalType": "string",
                         "name": "msg",
                         "type": "string"
@@ -142,21 +250,16 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
                         "internalType": "uint256",
                         "name": "amount",
                         "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256",
-                        "name": "rateOfWin",
-                        "type": "uint256"
                     }
                 ],
-                "name": "Flip",
+                "name": "withdraw",
                 "outputs": [],
                 "stateMutability": "nonpayable",
                 "type": "function"
             },
             {
                 "inputs": [],
-                "name": "acceptOwnership",
+                "name": "withdrawLink",
                 "outputs": [],
                 "stateMutability": "nonpayable",
                 "type": "function"
@@ -201,21 +304,16 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
                 "type": "function"
             },
             {
-                "inputs": [
+                "inputs": [],
+                "name": "paused",
+                "outputs": [
                     {
-                        "internalType": "uint256",
-                        "name": "_requestId",
-                        "type": "uint256"
-                    },
-                    {
-                        "internalType": "uint256[]",
-                        "name": "_randomWords",
-                        "type": "uint256[]"
+                        "internalType": "bool",
+                        "name": "",
+                        "type": "bool"
                     }
                 ],
-                "name": "rawFulfillRandomWords",
-                "outputs": [],
-                "stateMutability": "nonpayable",
+                "stateMutability": "view",
                 "type": "function"
             },
             {
@@ -317,36 +415,10 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
                 ],
                 "stateMutability": "view",
                 "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "address",
-                        "name": "to",
-                        "type": "address"
-                    }
-                ],
-                "name": "transferOwnership",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [
-                    {
-                        "internalType": "uint256",
-                        "name": "amount",
-                        "type": "uint256"
-                    }
-                ],
-                "name": "withdraw",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
             }
         ]
         let amountById = config.amountOptions.find(x => x.id === payload.amount)
-        let contract = new web3.eth.Contract(contractABI, contractAddress, { from: fromAddress })
+        let contract = new web3.eth.Contract(contractABI, contractAddress, {from: fromAddress})
         let amount = web3.utils.toHex(web3.utils.toWei(amountById.amount.toString()));
 
         let data = contract.methods.Flip(amount, web3.utils.toHex((rateOfWin * 10).toString())).encodeABI()
@@ -371,18 +443,18 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
             value: '0x00',
             data: tokenData,
         };
-         await window.ethereum.request({
+        await window.ethereum.request({
             method: 'eth_sendTransaction',
             params: [tokenTransactionParameters],
         });
         await sleep(4000)
+        checkContract()
         const txHash = await window.ethereum.request({
             method: 'eth_sendTransaction',
             params: [transactionParameters],
         });
         payload.txHash = txHash
-        checkContract(txHash)
-        function checkContract(txHash) {
+        function checkContract() {            
             contract.once('WinEvent', (a, b) => {
                 var flipTail = [
                     "fliptail900",
@@ -402,31 +474,31 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
                 }
                 console.log(b)
                 // if (b.transactionHash === txHash) {
-                    let flipChoice = ''
-                    let winLose = ''
-                    if (b.returnValues.winner === false) {
-                        flipChoice = (payload.flipChoice === 'Head' ? 'Tail' : 'Head')
-                        winLose = false
-                    } else {
-                        winLose = true
-                        flipChoice = payload.flipChoice
-                    }
-                    document.getElementById("coin").className = ''
-                    setTimeout(() => {
-                        document.getElementById("coin").classList.add(getSpin(flipChoice === 'Head' ? flipHead : flipTail));
-                    }, 300);
+                let flipChoice = ''
+                let winLose = ''
+                if (b.returnValues.winner === false) {
+                    flipChoice = (payload.flipChoice === 'Head' ? 'Tail' : 'Head')
+                    winLose = false
+                } else {
+                    winLose = true
+                    flipChoice = payload.flipChoice
+                }
+                document.getElementById("coin").className = ''
+                setTimeout(() => {
+                    document.getElementById("coin").classList.add(getSpin(flipChoice === 'Head' ? flipHead : flipTail));
+                }, 300);
 
-                    setTimeout(() => {
-                        setDisableBtn(false)
-                        if (!winLose) {
-                            return showAlert(setAlert, 'You lost the bet.')
-                        } else {
-                            return showAlert(setAlert, `Congratulation! You won ${b.returnValues.amount/1000000000000000000} PREY!`, 'success')
-                        }
-                    }, 3500);
+                setTimeout(() => {
+                    setDisableBtn(false)
+                    if (!winLose) {
+                        return showAlert(setAlert, 'You lost the bet.')
+                    } else {
+                        return showAlert(setAlert, `Congratulation! You won ${b.returnValues.amount / 1000000000000000000} PREY!`, 'success')
+                    }
+                }, 3500);
 
                 // } else {
-                    // checkContract(txHash)
+                // checkContract(txHash)
                 // }
             })
         }
