@@ -398,9 +398,9 @@ export default function RecentTransactions() {
                     const event = (parameters[parameters.length-1])
                     
                     checkTransaction()
+                    console.log(event)
                     if (event.blockNumber) {
                         let tx = (await web3.eth.getBlock(event.blockNumber))
-                        console.log(tx.transactionsRoot)
                         if (transactions.length === 15) {
                             setTransactions((prev) => [
                                 { transactionSignature: tx.transactions[0], usedAt: tx.timestamp * 1000 },
