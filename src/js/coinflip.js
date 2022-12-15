@@ -3,6 +3,7 @@ import Web3 from "web3";
 import config from "../config";
 import { showAlert, sleep } from "./utility";
 import { Avalanche, BinTools, Buffer, BN } from "avalanche"
+import { ethers } from "ethers";
 
 export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
     event.preventDefault()
@@ -418,7 +419,7 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
             }
         ]
         let amountById = config.amountOptions.find(x => x.id === payload.amount)
-        let contract = new web3.eth.Contract(contractABI, contractAddress, {from: fromAddress})
+        let contract = new web3.eth.Contract(contractABI, contractAddress, { from: fromAddress })
         let amount = web3.utils.toHex(web3.utils.toWei(amountById.amount.toString()));
 
         let data = contract.methods.Flip(amount, web3.utils.toHex((rateOfWin * 10).toString())).encodeABI()
@@ -448,14 +449,26 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
             params: [tokenTransactionParameters],
         });
         await sleep(4000)
-        checkContract()
         const txHash = await window.ethereum.request({
             method: 'eth_sendTransaction',
             params: [transactionParameters],
         });
         payload.txHash = txHash
-        function checkContract() {            
-            contract.once('WinEvent', (a, b) => {
+        checkContract()
+
+        function checkContract() {
+
+
+            const provider = new ethers.providers.Web3Provider(
+                window.ethereum
+            );
+            const contract2 = new ethers.Contract(config.contractAddress, contractABI, provider);
+
+            contract2.once("WinEvent", (msg, user, amount, winner, checkWin) => {
+                if(user !== account) {
+                    return checkContract
+                }
+                console.log(msg, user, amount, winner, checkWin)
                 var flipTail = [
                     "fliptail900",
                     "fliptail1260",
@@ -472,11 +485,10 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
                     var spin = spinArray[Math.floor(Math.random() * spinArray.length)];
                     return spin;
                 }
-                console.log(b)
                 // if (b.transactionHash === txHash) {
                 let flipChoice = ''
                 let winLose = ''
-                if (b.returnValues.winner === false) {
+                if (winner === false) {
                     flipChoice = (payload.flipChoice === 'Head' ? 'Tail' : 'Head')
                     winLose = false
                 } else {
@@ -493,13 +505,16 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
                     if (!winLose) {
                         return showAlert(setAlert, 'You lost the bet.')
                     } else {
-                        return showAlert(setAlert, `Congratulation! You won ${b.returnValues.amount / 1000000000000000000} PREY!`, 'success')
+                        return showAlert(setAlert, `Congratulation! You won ${amount / 1000000000000000000} PREY!`, 'success')
                     }
                 }, 3500);
 
                 // } else {
                 // checkContract(txHash)
                 // }
+            });
+
+            contract.once('WinEvent', (a, b) => {
             })
         }
     } catch (err) {

@@ -80,7 +80,7 @@ contract CoinFlip is
                 token.transfer(address(payer), balanceOfContract);
                 emit WinEvent(
                     "Congratulation you won",
-                    msg.sender,
+                    payer,
                     prize,
                     true,
                     checkWinNumber
@@ -89,7 +89,7 @@ contract CoinFlip is
                 token.transfer(address(payer), prize);
                 emit WinEvent(
                     "Congratulation you won",
-                    msg.sender,
+                    payer,
                     prize,
                     true,
                     checkWinNumber
@@ -98,7 +98,7 @@ contract CoinFlip is
         } else {
             emit WinEvent(
                 "You lost the bet!",
-                msg.sender,
+                payer,
                 amountPaid,
                 false,
                 checkWinNumber

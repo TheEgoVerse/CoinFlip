@@ -51,6 +51,7 @@ body {
   padding-left: 10px;
   padding-right: 10px;
   color: white;
+  -webkit-tap-highlight-color: transparent;
   background: black;
   float: right;
   margin-right: 15px;

@@ -1,3 +1,4 @@
+import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react'
 import Timestamp from 'react-timestamp';
 import Web3 from 'web3';
@@ -388,8 +389,14 @@ export default function RecentTransactions() {
             setTransactions(transactions)
             checkTransaction()
             function checkTransaction() {
-                contract.once('WinEvent', async (err, event) => {
-                    console.log(event)
+                const provider = new ethers.providers.Web3Provider(
+                    window.ethereum
+                );
+                const contract2 = new ethers.Contract(config.contractAddress, contractABI, provider);
+    
+                contract2.once('WinEvent', async (...parameters) => {
+                    const event = (parameters[parameters.length-1])
+                    
                     checkTransaction()
                     if (event.blockNumber) {
                         let tx = (await web3.eth.getBlock(event.blockNumber))
