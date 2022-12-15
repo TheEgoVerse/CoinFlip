@@ -436,7 +436,7 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
         let tokenContract = new web3.eth.Contract(tokenABI, tokenAddress)
         let allowance = await tokenContract.methods.allowance(account, contractAddress).call()
         if (allowance < web3.utils.toWei(amountById.amount.toString())) {
-            let tokenData = tokenContract.methods.approve(contractAddress, web3.utils.toHex(web3.utils.toWei('1000'))).encodeABI()
+            let tokenData = tokenContract.methods.approve(contractAddress, web3.utils.toHex(web3.utils.toWei('10000'))).encodeABI()
 
             const tokenTransactionParameters = {
                 nonce: '0x00',

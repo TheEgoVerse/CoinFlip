@@ -73,7 +73,7 @@ export default function FlipOptionForm({ setAlert }) {
                             <img className="back" src='https://media.discordapp.net/attachments/879937579749883944/1044677885958553680/tail.png' alt='coin-back' />
                         </div>
                     </div>
-                    <input type={"submit"} disabled={disableBtn} style={{ fontSize: '5rem', color: 'black', height: '100%', fontWeight: '700' }} className='font-signika coin-flip__blue-submit-form-btn' value={'Flip Coin'} />
+                    <input type={"submit"} disabled={disableBtn} style={{ fontSize: '5rem', color: 'black', height: '100%', fontWeight: '700' }} className='font-signika coin-flip__blue-submit-form-btn' value={`Flip Coin`} />
                 </div>
             </form>
 
