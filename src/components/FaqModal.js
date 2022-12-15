@@ -6,7 +6,7 @@ import Modal from '@mui/material/Modal';
 
 const style = {
     position: 'absolute',
-    top: '50%',
+    top: '100%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 400,
@@ -14,6 +14,7 @@ const style = {
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
+    overflowY: 'scroll'
 };
 
 export default function FaqModal(props) {
@@ -33,8 +34,7 @@ export default function FaqModal(props) {
                         FAQ
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        <pre>
-                        - What is PREY?
+                        <div style={{whiteSpace: 'pre-line'}}>{`- What is PREY?
 
                         PREY is our native utility token with an unlimited supply. Printed solely by staking Alter Ego Punks.
 
@@ -72,8 +72,8 @@ export default function FaqModal(props) {
 
                         - How do I collect my winnings?
 
-                        Your winnings will automatically appear in your wallet if you won the bet.
-                        </pre>
+                        Your winnings will automatically appear in your wallet if you won the bet.`}
+                        </div>
                     </Typography>
                 </Box>
             </Modal>
