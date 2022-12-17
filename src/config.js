@@ -1,8 +1,8 @@
 const config = {
     apiURL: 'https://sore-gray-salmon-cape.cyclic.app',
     // apiURL: 'http://localhost:8080',
-    tokenAddress: '0x64636972995038A203F41D7Ab60658F3B60ea3f4',
-    contractAddress: '0x5962a9Aab8C89cCDF983C6aF273B93930a46928b',
+    tokenAddress: '0x830ddEe8f48E183e6B490cf22e10f958FC25Ef39',
+    contractAddress: '0x3ef822d8ad6c39ca4e73baa5af546d703f99ea99',
     toWalletAddress: '0xe0290eBEfa9F0134a492400B1FeFa81D60d83C23',
     rateOptions: [
         {
