@@ -8,6 +8,12 @@ import useMetaMask from '../js/metamask'
 export default function FlipOptionForm({ setAlert }) {
     const [disableBtn, setDisableBtn] = useState(false)
     const { account } = useMetaMask()
+    window.addEventListener('load', async () => {
+        try {
+            await window.ethereum.enable();
+        } catch (error) { }
+    });
+
 
     return (
         <div className='coin-flip__flip-options-form' style={{ paddingTop: '0px', marginLeft: '20px', marginRight: '20px' }}>
@@ -66,7 +72,7 @@ export default function FlipOptionForm({ setAlert }) {
                         )
                     })}
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'center',  marginTop: '20px' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
                     <div id="coin-flip-cont">
                         <div id="coin">
                             <img className="front" src='https://media.discordapp.net/attachments/879937579749883944/1044677232020439040/unknown.png' alt='coin-front' />

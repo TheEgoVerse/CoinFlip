@@ -426,10 +426,11 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
         const transactionParameters = {
             nonce: '0x00',
             to: contractAddress,
-            gasPrice: '0x00', 
+            // gasPrice: '0x00', 
             from: window.ethereum.selectedAddress,
             value: '0x00',
             data: data,
+            chainId: '0xa86a'
         };
         let gasPrice = await web3.eth.getGasPrice()
         transactionParameters.gasPrice = web3.utils.toHex(gasPrice)
@@ -445,11 +446,12 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
             const tokenTransactionParameters = {
                 nonce: '0x00',
                 to: tokenAddress,
-                gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
-                gas: '0x2710', // customizable by user during MetaMask confirmation.              
+                // gasPrice: '0x09184e72a000', // customizable by user during MetaMask confirmation.
+                // gas: '0x2710', // customizable by user during MetaMask confirmation.              
                 from: window.ethereum.selectedAddress,
                 value: '0x00',
                 data: tokenData,
+                chainId: '0xa86a'
             };
             let gasPrice2 = await web3.eth.getGasPrice()
             tokenTransactionParameters.gasPrice = web3.utils.toHex(gasPrice2)
@@ -533,6 +535,6 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
     } catch (err) {
         console.log(err)
         setDisableBtn(false)
-        return showAlert(setAlert, JSON.stringify(err))
+        return showAlert(setAlert, 'An unknown error occured.')
     }
 }
