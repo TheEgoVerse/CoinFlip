@@ -488,6 +488,6 @@ export const coinFlip = async (event, setAlert, setDisableBtn, account) => {
     } catch (err) {
         console.log(err)
         setDisableBtn(false)
-        return showAlert(setAlert, JSON.stringify(err))
+        return showAlert(setAlert, `An unknown error occured`)
     }
 }
