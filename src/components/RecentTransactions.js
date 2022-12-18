@@ -9,11 +9,10 @@ export default function RecentTransactions() {
     const { account } = useMetaMask()
     const [transactions, setTransactions] = useState([])
     useEffect(() => {
-        getRecentTransactions(account)
-    }, [account])
-    async function getRecentTransactions(walletAddress) {
+        getRecentTransactions()
+    }, [])
+    async function getRecentTransactions() {
         try {
-            console.log(Web3.givenProvider)
             const web3 = new Web3(Web3.givenProvider);
             let contractAddress = config.contractAddress
             let contractABI = [
@@ -397,7 +396,6 @@ export default function RecentTransactions() {
                 contract2.once('WinEvent', async (...parameters) => {
                     const event = (parameters[parameters.length-1])
                     
-                    checkTransaction()
                     console.log(event)
                     if (event.blockNumber) {
                         let tx = (await web3.eth.getBlock(event.blockNumber))
